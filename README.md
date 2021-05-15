@@ -32,6 +32,9 @@
 $ npm install
 ```
 
+## migration
+npm run migrate:dev
+
 ## Running the app
 
 ```bash

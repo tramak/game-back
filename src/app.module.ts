@@ -4,6 +4,10 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { ConfigModule } from '@nestjs/config';
+import { UsersEntity } from './users/users.entity';
+import { RolesModule } from './roles/roles.module';
+import { RolesEntity } from './roles/roles.entity';
+import { UserRolesEntity } from './roles/user-roles.entity';
 
 @Module({
   imports: [
@@ -17,11 +21,12 @@ import { ConfigModule } from '@nestjs/config';
       username: process.env.MYSQL_USER,
       password: process.env.MYSQL_PASSWORD,
       database: process.env.MYSQL_DB,
-      entities: [],
+      entities: [UsersEntity, RolesEntity, UserRolesEntity],
       synchronize: true,
       // autoLoadEntities: true,
     }),
     UsersModule,
+    RolesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
