@@ -20,8 +20,10 @@ export class UsersService {
     return user;
   }
 
-  async getAllUser(): Promise<Array<UsersModel>> {
+  async getAll(limit: number, offset: number): Promise<Array<UsersModel>> {
     const users = await this.usersRepository.findAll({
+      limit,
+      offset,
       include: [RolesModel],
     });
 

@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import * as path from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
@@ -9,9 +10,13 @@ import { RolesModel } from './roles/roles.model';
 import { UsersRolesModel } from './roles/users-roles.model';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { CompanyModule } from './company/company.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: path.resolve('static'),
+    }),
     ConfigModule.forRoot({
       envFilePath: `.${process.env.NODE_ENV}.env`,
     }),
