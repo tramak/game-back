@@ -1,27 +1,34 @@
 import { Injectable } from '@nestjs/common';
-import { UsersEntity } from './users.entity';
+import { UsersModel } from './users.model';
 import { CreateUserDto } from './dto/create-user.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { InjectModel } from '@nestjs/sequelize';
+import { RolesService } from '../roles/roles.service';
+import { RolesModel } from '../roles/roles.model';
 
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectRepository(UsersEntity)
-    private usersRepository: Repository<UsersEntity>,
+    @InjectModel(UsersModel)
+    private usersRepository: typeof UsersModel,
+    private roleService: RolesService,
   ) {}
 
-  async createUser(dto: CreateUserDto): Promise<UsersEntity> {
-    const user = await this.usersRepository.save(dto);
+  async createUser(dto: CreateUserDto): Promise<UsersModel> {
+    const user = await this.usersRepository.create(dto);
+    const role = await this.roleService.getRoleByValue('USER');
+    await user.$set('roles', [role.id]);
     return user;
   }
 
-  async getAllUser(): Promise<Array<UsersEntity>> {
-    const users = await this.usersRepository.find();
+  async getAllUser(): Promise<Array<UsersModel>> {
+    const users = await this.usersRepository.findAll({
+      include: [RolesModel],
+    });
+
     return users;
   }
 
-  async remove(id: string): Promise<void> {
-    await this.usersRepository.delete(id);
-  }
+  // async remove(id: string): Promise<void> {
+  //   await this.usersRepository.delete(id);
+  // }
 }
