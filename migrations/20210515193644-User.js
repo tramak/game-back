@@ -33,7 +33,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      company: {
+      companyId: {
         type: Sequelize.INTEGER,
       },
       status: {
@@ -44,6 +44,9 @@ module.exports = {
       },
       updatedAt: {
         type: Sequelize.DATE,
+      },
+      token: {
+        type: Sequelize.STRING,
       },
     });
   },

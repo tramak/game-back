@@ -11,6 +11,7 @@ import { UsersRolesModel } from './roles/users-roles.model';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { CompanyModule } from './company/company.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
     UsersModule,
     RolesModule,
     CompanyModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

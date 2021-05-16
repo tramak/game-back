@@ -17,6 +17,10 @@ interface UserCreationAttrs {
   password: string;
 }
 
+export interface IUser extends UserCreationAttrs {
+  id: string;
+}
+
 @Table({ tableName: 'users' })
 export class UsersModel extends Model<UsersModel, UserCreationAttrs> {
   @ApiProperty({ example: '1', description: 'Уникальный идентификатор' })
@@ -55,7 +59,7 @@ export class UsersModel extends Model<UsersModel, UserCreationAttrs> {
   password: string;
 
   @Column({ type: DataType.INTEGER })
-  company: number;
+  companyId: number;
 
   @ApiProperty({ example: 1, description: 'Статус' })
   @Column({ type: DataType.STRING, allowNull: false, defaultValue: 0 })
