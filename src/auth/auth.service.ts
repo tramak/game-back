@@ -30,7 +30,9 @@ export class AuthService {
   }
 
   async generateToken(user: UsersModel) {
+    const secret = 'jwtConstants.secret';
     const payload = { email: user.email, sub: user.id };
+    console.log(secret);
     return {
       access_token: this.jwtService.sign(payload),
     };

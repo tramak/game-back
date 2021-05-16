@@ -4,9 +4,9 @@ import { Observable } from 'rxjs';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
+// export class JwtAuthGuard implements CanActivate {
 // export class JwtAuthGuard extends AuthGuard('jwt') {}
 export class JwtAuthGuard extends AuthGuard('jwt') {
-// export class JwtAuthGuard implements CanActivate {
   constructor(private jwtService: JwtService) {
     super();
   }
@@ -24,11 +24,9 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         throw new Error();
       }
 
-      const secret = process.env.JWT_SECRET || 'jwtConstants.secret';
-      console.log({ token });
-      const user = this.jwtService.verify(token, {
-        secret,
-      });
+      const secret = 'jwtConstants.secret';
+      console.log({ token, secret });
+      const user = this.jwtService.verify(token);
       console.log({ user });
       req.user = user;
     } catch (e) {
