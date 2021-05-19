@@ -18,15 +18,25 @@ export class AuthService {
   ) {}
 
   async validateUser(email: string, password: string): Promise<any> {
+    console.log({ email, password });
     const user = await this.usersService.findByEmail(email);
-    const passwordEquals = await bcrypt.compare(password, user?.password);
-    if (user && passwordEquals) {
-      return user;
-    }
+    console.log({ user });
+    try {
+      const passwordEquals = await bcrypt.compare(password, user?.password);
+      if (user && passwordEquals) {
+        return user;
+      }
 
-    throw new UnauthorizedException({
-      message: 'Некоректный email или пароль',
-    });
+      throw new Error();
+    } catch (e) {
+      throw new UnauthorizedException({
+        errors: [
+          {
+            message: 'Некоректный email или пароль',
+          },
+        ],
+      });
+    }
   }
 
   async generateToken(user: UsersModel) {
@@ -34,7 +44,7 @@ export class AuthService {
     const payload = { email: user.email, sub: user.id };
     console.log(secret);
     return {
-      access_token: this.jwtService.sign(payload),
+      jwtToken: this.jwtService.sign(payload),
     };
   }
 

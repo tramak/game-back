@@ -10,6 +10,12 @@ export class AppController {
 
   @Get()
   getHello(): string {
+    return `
+      <script src="https://unpkg.com/axios/dist/axios.min.js"></script>test
+      <script>
+      
+</script>
+`;
     return this.appService.getHello();
   }
 
