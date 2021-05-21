@@ -38,13 +38,13 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        value: 'ADMIN',
-        description: 'Администратор',
+        value: 'ADMIN_COMPANY',
+        description: 'Администратор компании',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
-        value: 'ADMIN_SYSTEM',
+        value: 'ADMIN',
         description: 'Администратор системы',
         createdAt: new Date(),
         updatedAt: new Date(),

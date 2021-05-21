@@ -15,29 +15,32 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      firstName: {
+      fio: {
         type: Sequelize.STRING,
       },
-      middleName: {
-        type: Sequelize.STRING,
-      },
-      lastName: {
-        type: Sequelize.STRING,
+      companyId: {
+        type: Sequelize.INTEGER,
       },
       email: {
         type: Sequelize.STRING,
         allowNull: false,
         uniqueKey: true,
       },
+      group: {
+        type: Sequelize.STRING,
+      },
+      photo: {
+        type: Sequelize.INTEGER,
+      },
       password: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      companyId: {
-        type: Sequelize.INTEGER,
-      },
       status: {
         type: Sequelize.INTEGER,
+      },
+      invitationAt: {
+        type: Sequelize.DATE,
       },
       createdAt: {
         type: Sequelize.DATE,
