@@ -34,6 +34,7 @@ $ npm install
 
 ## migration
 npm run migrate:dev
+cross-env NODE_ENV=development sequelize-cli db:migrate:undo
 
 ## Running the app
 
