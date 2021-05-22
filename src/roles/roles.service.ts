@@ -5,8 +5,9 @@ import { CreateRoleDto } from './dto/create-role.dto';
 
 @Injectable()
 export class RolesService {
-  constructor(@InjectModel(RolesModel) private roleRepository: typeof RolesModel) {
-  }
+  constructor(
+    @InjectModel(RolesModel) private roleRepository: typeof RolesModel,
+  ) {}
 
   async createRole(dto: CreateRoleDto) {
     const role = await this.roleRepository.create(dto);

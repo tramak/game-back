@@ -10,10 +10,11 @@ import { RolesModel } from '../roles/roles.model';
 import { UsersRolesModel } from '../roles/users-roles.model';
 
 interface UserCreationAttrs {
-  firstName: string;
-  middleName?: string;
-  lastName?: string;
+  fio: string;
+  companyId?: number;
+  role: string;
   email: string;
+  group: string;
   password: string;
 }
 
@@ -32,21 +33,12 @@ export class UsersModel extends Model<UsersModel, UserCreationAttrs> {
   })
   id: number;
 
-  @ApiProperty({ example: 'Виктор', description: 'Имя' })
+  @ApiProperty({ example: 'Калаев Виктор Владимирович', description: 'ФИО' })
   @Column({ type: DataType.STRING, allowNull: false })
-  firstName: string;
+  fio: string;
 
-  @ApiProperty({
-    example: 'Владимирович',
-    description: 'Отчество',
-    required: false,
-  })
-  @Column({ type: DataType.STRING })
-  middleName: string;
-
-  @ApiProperty({ example: 'Калаев', description: 'Фамилия', required: false })
-  @Column({ type: DataType.STRING })
-  lastName: string;
+  @Column({ type: DataType.INTEGER })
+  companyId: number;
 
   @ApiProperty({
     example: 'kalaev-viktor@mail.ru',
@@ -55,15 +47,27 @@ export class UsersModel extends Model<UsersModel, UserCreationAttrs> {
   @Column({ type: DataType.STRING, allowNull: false, unique: true })
   email: string;
 
-  @Column({ type: DataType.STRING, allowNull: false })
-  password: string;
+  @Column({ type: DataType.STRING })
+  group: string;
 
   @Column({ type: DataType.INTEGER })
-  companyId: number;
+  photo: number;
+
+  @Column({ type: DataType.STRING, allowNull: false })
+  password: string;
 
   @ApiProperty({ example: 1, description: 'Статус' })
   @Column({ type: DataType.STRING, allowNull: false, defaultValue: 0 })
   status: number;
+
+  @Column({ type: DataType.DATE, allowNull: false })
+  invitationAt: string;
+
+  @Column({ type: DataType.DATE, allowNull: false })
+  createdAt: string;
+
+  @Column({ type: DataType.DATE, allowNull: false })
+  updatedAt: string;
 
   @BelongsToMany(() => RolesModel, () => UsersRolesModel)
   roles: RolesModel[];

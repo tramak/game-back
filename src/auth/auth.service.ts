@@ -18,9 +18,7 @@ export class AuthService {
   ) {}
 
   async validateUser(email: string, password: string): Promise<any> {
-    console.log({ email, password });
     const user = await this.usersService.findByEmail(email);
-    console.log({ user });
     try {
       const passwordEquals = await bcrypt.compare(password, user?.password);
       if (user && passwordEquals) {
@@ -40,9 +38,8 @@ export class AuthService {
   }
 
   async generateToken(user: UsersModel) {
-    const secret = 'jwtConstants.secret';
     const payload = { email: user.email, sub: user.id };
-    console.log(secret);
+
     return {
       jwtToken: this.jwtService.sign(payload),
     };
