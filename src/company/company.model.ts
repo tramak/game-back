@@ -1,14 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Column, DataType, Model, Table } from 'sequelize-typescript';
 
-interface UserCreationAttrs {
+interface CompanyCreationAttrs {
   name: string;
   description?: string;
   email?: string;
+  url?: string;
 }
 
 @Table({ tableName: 'company' })
-export class UsersModel extends Model<UsersModel, UserCreationAttrs> {
+export class CompanyModel extends Model<CompanyModel, CompanyCreationAttrs> {
   @ApiProperty({ example: '1', description: 'Уникальный идентификатор' })
   @Column({
     type: DataType.INTEGER,
@@ -36,4 +37,11 @@ export class UsersModel extends Model<UsersModel, UserCreationAttrs> {
   })
   @Column({ type: DataType.STRING })
   email: string;
+
+  @ApiProperty({
+    example: 'https://tactise.com',
+    description: 'url для компании',
+  })
+  @Column({ type: DataType.STRING })
+  url: string;
 }

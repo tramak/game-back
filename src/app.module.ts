@@ -13,6 +13,7 @@ import { CompanyModule } from './company/company.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { AuthModule } from './auth/auth.module';
 import { JwtService } from '@nestjs/jwt';
+import { CompanyModel } from './company/company.model';
 
 @Module({
   imports: [
@@ -29,7 +30,7 @@ import { JwtService } from '@nestjs/jwt';
       username: process.env.MYSQL_USER,
       password: process.env.MYSQL_PASSWORD,
       database: process.env.MYSQL_DB,
-      models: [UsersModel, RolesModel, UsersRolesModel],
+      models: [UsersModel, RolesModel, UsersRolesModel, CompanyModel],
       synchronize: true,
       // autoLoadEntities: true,
     }),

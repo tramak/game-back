@@ -1,4 +1,10 @@
-import { Controller, Get, NotAcceptableException, Request, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  NotAcceptableException,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 import { AppService } from './app.service';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { RolesAuthGuard } from './auth/guards/roles-auth.guard';
