@@ -5,6 +5,9 @@ import { InjectModel } from '@nestjs/sequelize';
 import { RolesService } from '../roles/roles.service';
 import { RolesModel } from '../roles/roles.model';
 import * as bcrypt from 'bcrypt';
+import * as moment from 'moment';
+import { CompanyModel } from '../company/company.model';
+import { CreateCompanyDto } from '../company/dto/create-company.dto';
 
 @Injectable()
 export class UsersService {
@@ -18,11 +21,23 @@ export class UsersService {
     const password = await bcrypt.hash(dto.password, 5);
     const user = await this.usersRepository.create({
       ...dto,
+      invitationAt: moment().format('YYYY-MM-DD HH:mm:ss'),
       password,
     });
-    const role = await this.roleService.getRoleByValue('USER');
+    const role = await this.roleService.getRoleByValue(dto.role || 'USER');
     await user.$set('roles', [role.id]);
     user.roles = [role];
+    return user;
+  }
+
+  async editUser(id, dto: CreateUserDto): Promise<UsersModel> {
+    const user = await this.findById(id);
+    await user.update(dto);
+    if (dto.role) {
+      const role = await this.roleService.getRoleByValue(dto.role);
+      await user.$set('roles', [role.id]);
+    }
+    // await company.save();
     return user;
   }
 
@@ -30,7 +45,7 @@ export class UsersService {
     const users = await this.usersRepository.findAll({
       limit,
       offset,
-      include: [RolesModel],
+      include: [RolesModel, CompanyModel],
     });
 
     return users;
@@ -45,7 +60,15 @@ export class UsersService {
     return user;
   }
 
-  // async remove(id: string): Promise<void> {
-  //   await this.usersRepository.delete(id);
-  // }
+  async findById(id: number): Promise<UsersModel> {
+    const user = await this.usersRepository.findOne({
+      where: { id },
+    });
+
+    return user;
+  }
+
+  async deleteById(id: number) {
+    await this.usersRepository.destroy({ where: { id } });
+  }
 }

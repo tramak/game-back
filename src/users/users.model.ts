@@ -1,13 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
+  BelongsTo,
   BelongsToMany,
   Column,
-  DataType,
+  DataType, ForeignKey,
   Model,
-  Table,
+  Table
 } from 'sequelize-typescript';
 import { RolesModel } from '../roles/roles.model';
 import { UsersRolesModel } from '../roles/users-roles.model';
+import { CompanyModel } from '../company/company.model';
 
 interface UserCreationAttrs {
   fio: string;
@@ -16,6 +18,7 @@ interface UserCreationAttrs {
   email: string;
   group: string;
   password: string;
+  invitationAt: string;
 }
 
 export interface IUser extends UserCreationAttrs {
@@ -38,7 +41,11 @@ export class UsersModel extends Model<UsersModel, UserCreationAttrs> {
   fio: string;
 
   @Column({ type: DataType.INTEGER })
+  @ForeignKey(() => CompanyModel)
   companyId: number;
+
+  @BelongsTo(() => CompanyModel, 'companyId')
+  company: CompanyModel;
 
   @ApiProperty({
     example: 'kalaev-viktor@mail.ru',
@@ -60,7 +67,7 @@ export class UsersModel extends Model<UsersModel, UserCreationAttrs> {
   @Column({ type: DataType.STRING, allowNull: false, defaultValue: 0 })
   status: number;
 
-  @Column({ type: DataType.DATE, allowNull: false })
+  @Column({ type: DataType.DATE })
   invitationAt: string;
 
   @Column({ type: DataType.DATE, allowNull: false })

@@ -33,6 +33,9 @@ module.exports = {
       updatedAt: {
         type: Sequelize.DATE,
       },
+      invitationAt: {
+        type: Sequelize.DATE,
+      },
     });
   },
 
