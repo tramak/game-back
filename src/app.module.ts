@@ -14,6 +14,8 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { AuthModule } from './auth/auth.module';
 import { JwtService } from '@nestjs/jwt';
 import { CompanyModel } from './company/company.model';
+import { FileModule } from './file/file.module';
+import { FileModel } from './file/file.model';
 
 @Module({
   imports: [
@@ -30,7 +32,13 @@ import { CompanyModel } from './company/company.model';
       username: process.env.MYSQL_USER,
       password: process.env.MYSQL_PASSWORD,
       database: process.env.MYSQL_DB,
-      models: [UsersModel, RolesModel, UsersRolesModel, CompanyModel],
+      models: [
+        UsersModel,
+        RolesModel,
+        UsersRolesModel,
+        CompanyModel,
+        FileModel,
+      ],
       synchronize: true,
       // autoLoadEntities: true,
     }),
@@ -38,6 +46,7 @@ import { CompanyModel } from './company/company.model';
     RolesModule,
     CompanyModule,
     AuthModule,
+    FileModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -7,19 +7,25 @@ import {
   UseGuards,
   Param,
   Put,
-  Delete,
+  Delete, UseInterceptors, UploadedFile
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UsersService } from './users.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UsersModel } from './users.model';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { FileService } from '../file/file.service';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { Express } from 'express';
 
 @ApiTags('Пользователи')
 @UseGuards(JwtAuthGuard)
 @Controller('api/user')
 export class UsersController {
-  constructor(private usersService: UsersService) {}
+  constructor(
+    private usersService: UsersService,
+    private fileService: FileService,
+  ) {}
 
   @ApiOperation({ summary: 'Создание пользователя' })
   @ApiResponse({ status: 200, type: UsersModel })
@@ -68,5 +74,16 @@ export class UsersController {
   @Delete(':id')
   remove(@Param() params) {
     return this.usersService.deleteById(Number(params.id));
+  }
+
+  @ApiOperation({ summary: 'Импортируем xsl с пользователями' })
+  @ApiResponse({ status: 200 })
+  @Post('import/xsl')
+  @UseInterceptors(FileInterceptor('file'))
+  async importXsl(@UploadedFile() file) {
+    const fileModel = await this.fileService.createFile(file);
+    return {
+      id: fileModel,
+    };
   }
 }
