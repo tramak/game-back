@@ -31,6 +31,7 @@ export class AuthService {
         errors: [
           {
             message: 'Некоректный email или пароль',
+            field: 'password',
           },
         ],
       });
