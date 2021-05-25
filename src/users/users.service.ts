@@ -32,7 +32,19 @@ export class UsersService {
 
   async editUser(id, dto: CreateUserDto): Promise<UsersModel> {
     const user = await this.findById(id);
-    await user.update(dto);
+
+    let password;
+    if (dto.password) {
+      password = await bcrypt.hash(dto.password, 5);
+    } else {
+      password = user.password;
+    }
+
+    await user.update({
+      ...dto,
+      password,
+    });
+
     if (dto.role) {
       const role = await this.roleService.getRoleByValue(dto.role);
       await user.$set('roles', [role.id]);

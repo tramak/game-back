@@ -7,7 +7,9 @@ import {
   UseGuards,
   Param,
   Put,
-  Delete, UseInterceptors, UploadedFile
+  Delete,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UsersService } from './users.service';
@@ -17,6 +19,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { FileService } from '../file/file.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Express } from 'express';
+import * as moment from 'moment';
 
 @ApiTags('Пользователи')
 @UseGuards(JwtAuthGuard)
@@ -47,7 +50,9 @@ export class UsersController {
       email: user.email,
       group: user.group,
       roles: user.roles.map((role) => role.value),
-      invitationAt: user.invitationAt,
+      invitationAt: user.invitationAt
+        ? moment(user.invitationAt).format('YYYY-MM-DD HH:mm:ss')
+        : '',
       status: user.status,
     }));
   }
