@@ -8,7 +8,7 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "migrate:dev": "cross-env NODE_ENV=development sequelize-cli db:migrate",
-    "migrate:prod": "cross-env NODE_ENV=development ts-node ./node_modules/.bin/typeorm migrations:run",
+    "migrate:prod": "cross-env NODE_ENV=production sequelize-cli db:migrate",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "cross-env NODE_ENV=production nest start",
@@ -46,6 +46,7 @@
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
+    "pg": "^8.6.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^6.6.6",

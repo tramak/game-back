@@ -17,6 +17,7 @@ import { CompanyModel } from './company/company.model';
 import { FileModule } from './file/file.module';
 import { FileModel } from './file/file.model';
 import { MailModule } from './mail/mail.module';
+import { Dialect } from 'sequelize/types/lib/sequelize';
 
 @Module({
   imports: [
@@ -27,12 +28,12 @@ import { MailModule } from './mail/mail.module';
       envFilePath: `.${process.env.NODE_ENV}.env`,
     }),
     SequelizeModule.forRoot({
-      dialect: 'mysql',
-      host: process.env.MYSQL_HOST || 'localhost',
-      port: Number(process.env.MYSQL_PORT),
-      username: process.env.MYSQL_USER,
-      password: process.env.MYSQL_PASSWORD,
-      database: process.env.MYSQL_DB,
+      dialect: process.env.DATABASE_DIALECT as Dialect,
+      host: process.env.DATABASE_HOST || 'localhost',
+      port: Number(process.env.DATABASE_PORT),
+      username: process.env.DATABASE_USER,
+      password: process.env.DATABASE_PASSWORD,
+      database: process.env.DATABASE_DB,
       models: [
         UsersModel,
         RolesModel,

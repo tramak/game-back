@@ -1,28 +1,28 @@
-console.log(process.env.MYSQL_HOST);
+console.log(process.env.DATABASE_HOST);
 
 module.exports = {
   development: {
-    dialect: 'mysql',
+    dialect: 'postgres',
     host: 'localhost',
-    port: 3306,
-    username: 'root',
-    password: '1234',
-    database: 'game',
+    port: 5432,
+    username: 'postgres',
+    password: 'changeme',
+    database: 'postgres',
   },
   test: {
-    dialect: 'mysql',
+    dialect: 'postgres',
     host: 'localhost',
-    port: 3306,
-    username: 'root',
-    password: '1234',
-    database: 'game',
+    port: 5432,
+    username: 'postgres',
+    password: 'changeme',
+    database: 'postgres',
   },
   production: {
-    dialect: 'mysql',
-    host: process.env.MYSQL_HOST || 'localhost',
-    port: Number(process.env.MYSQL_PORT),
-    username: process.env.MYSQL_USER,
-    password: process.env.MYSQL_PASSWORD,
-    database: process.env.MYSQL_DB,
+    dialect: 'postgres',
+    host: process.env.DATABASE_HOST || 'localhost',
+    port: Number(process.env.DATABASE_PORT),
+    username: process.env.DATABASE_USER,
+    password: process.env.DATABASE_PASSWORD,
+    database: process.env.DATABASE_DB,
   },
 };
