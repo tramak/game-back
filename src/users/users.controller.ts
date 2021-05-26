@@ -10,6 +10,7 @@ import {
   Delete,
   UseInterceptors,
   UploadedFile,
+  Request
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UsersService } from './users.service';
@@ -20,6 +21,7 @@ import { FileService } from '../file/file.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Express } from 'express';
 import * as moment from 'moment';
+import { Roles } from '../roles/interfaces';
 
 @ApiTags('Пользователи')
 @UseGuards(JwtAuthGuard)
@@ -40,8 +42,22 @@ export class UsersController {
   @ApiOperation({ summary: 'Получение пользователей' })
   @ApiResponse({ status: 200, type: [UsersModel] })
   @Get('all')
-  async getAll(@Query('count') count = 50, @Query('offset') offset = 0) {
-    const users = await this.usersService.getAll(Number(count), Number(offset));
+  async getAll(
+    @Query('count') count = 50,
+    @Query('offset') offset = 0,
+    @Request() req,
+  ) {
+    const userAuth = await this.usersService.findByEmail(req.user.email);
+    let where = undefined;
+    if (!userAuth.roles.map((role) => role.value).includes(Roles.ADMIN)) {
+      where = { companyId: userAuth.companyId };
+    }
+
+    const users = await this.usersService.getAll(
+      Number(count),
+      Number(offset),
+      where,
+    );
 
     return users.map((user) => ({
       id: user.id,

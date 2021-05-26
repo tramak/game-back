@@ -53,11 +53,16 @@ export class UsersService {
     return user;
   }
 
-  async getAll(limit: number, offset: number): Promise<Array<UsersModel>> {
+  async getAll(
+    limit: number,
+    offset: number,
+    where?: any,
+  ): Promise<Array<UsersModel>> {
     const users = await this.usersRepository.findAll({
       limit,
       offset,
       include: [RolesModel, CompanyModel],
+      where,
     });
 
     return users;
