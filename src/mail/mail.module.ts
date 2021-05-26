@@ -4,6 +4,8 @@ import { Module } from '@nestjs/common';
 import { MailService } from './mail.service';
 import { join } from 'path';
 
+// console.log(join(process.cwd(), 'src', 'mail', 'templates'));
+
 @Module({
   imports: [
     MailerModule.forRoot({
@@ -23,6 +25,7 @@ import { join } from 'path';
       },
       template: {
         dir: join(__dirname, 'templates'),
+        // dir: join(process.cwd(), 'src', 'mail', 'templates'),
         adapter: new HandlebarsAdapter(), // or new PugAdapter() or new EjsAdapter()
         options: {
           strict: true,

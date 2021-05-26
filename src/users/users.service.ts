@@ -26,7 +26,8 @@ export class UsersService {
       invitationAt: moment().format('YYYY-MM-DD HH:mm:ss'),
       password,
     });
-    await this.mailService.sendUserConfirmation(user, password);
+
+    // await this.mailService.sendUserConfirmation(user, password);
 
     const role = await this.roleService.getRoleByValue(dto.role || 'USER');
     await user.$set('roles', [role.id]);
