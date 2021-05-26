@@ -8,6 +8,7 @@ import * as bcrypt from 'bcrypt';
 import * as moment from 'moment';
 import { CompanyModel } from '../company/company.model';
 import { CreateCompanyDto } from '../company/dto/create-company.dto';
+import { MailService } from '../mail/mail.service';
 
 @Injectable()
 export class UsersService {
@@ -15,6 +16,7 @@ export class UsersService {
     @InjectModel(UsersModel)
     private usersRepository: typeof UsersModel,
     private roleService: RolesService,
+    private mailService: MailService,
   ) {}
 
   async createUser(dto: CreateUserDto): Promise<UsersModel> {
@@ -24,6 +26,8 @@ export class UsersService {
       invitationAt: moment().format('YYYY-MM-DD HH:mm:ss'),
       password,
     });
+    await this.mailService.sendUserConfirmation(user, password);
+
     const role = await this.roleService.getRoleByValue(dto.role || 'USER');
     await user.$set('roles', [role.id]);
     user.roles = [role];

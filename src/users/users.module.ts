@@ -7,6 +7,7 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { UsersRolesModel } from '../roles/users-roles.model';
 import { RolesModule } from '../roles/roles.module';
 import { FileModule } from '../file/file.module';
+import { MailModule } from '../mail/mail.module';
 
 @Module({
   controllers: [UsersController],
@@ -15,6 +16,7 @@ import { FileModule } from '../file/file.module';
     SequelizeModule.forFeature([UsersModel, RolesModel, UsersRolesModel]),
     RolesModule,
     FileModule,
+    MailModule,
   ],
   exports: [UsersService],
 })

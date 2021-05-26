@@ -16,6 +16,7 @@ import { JwtService } from '@nestjs/jwt';
 import { CompanyModel } from './company/company.model';
 import { FileModule } from './file/file.module';
 import { FileModel } from './file/file.model';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { FileModel } from './file/file.model';
     CompanyModule,
     AuthModule,
     FileModule,
+    MailModule,
   ],
   controllers: [AppController],
   providers: [AppService],
