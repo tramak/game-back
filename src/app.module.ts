@@ -28,12 +28,12 @@ import { Dialect } from 'sequelize/types/lib/sequelize';
       envFilePath: `.${process.env.NODE_ENV}.env`,
     }),
     SequelizeModule.forRoot({
-      dialect: process.env.DATABASE_DIALECT as Dialect,
+      dialect: (process.env.DATABASE_DIALECT as Dialect) || 'postgres',
       host: process.env.DATABASE_HOST || 'localhost',
-      port: Number(process.env.DATABASE_PORT),
-      username: process.env.DATABASE_USER,
-      password: process.env.DATABASE_PASSWORD,
-      database: process.env.DATABASE_DB,
+      port: Number(process.env.DATABASE_PORT) || 5432,
+      username: process.env.DATABASE_USER || 'postgres',
+      password: process.env.DATABASE_PASSWORD || '1111',
+      database: process.env.DATABASE_DB || 'postgres',
       models: [
         UsersModel,
         RolesModel,
