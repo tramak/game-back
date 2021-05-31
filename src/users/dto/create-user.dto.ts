@@ -24,4 +24,7 @@ export class CreateUserDto {
 
   @ApiProperty({ example: '1234', description: 'Пароль' })
   readonly password: string;
+
+  @ApiProperty({ example: '1234', description: 'Токен пользователя для доступа в игру' })
+  readonly token?: string;
 }

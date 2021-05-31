@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { UsersModel } from './users.model';
@@ -8,6 +8,7 @@ import { UsersRolesModel } from '../roles/users-roles.model';
 import { RolesModule } from '../roles/roles.module';
 import { FileModule } from '../file/file.module';
 import { MailModule } from '../mail/mail.module';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   controllers: [UsersController],
@@ -17,6 +18,7 @@ import { MailModule } from '../mail/mail.module';
     RolesModule,
     FileModule,
     MailModule,
+    forwardRef(() => AuthModule),
   ],
   exports: [UsersService],
 })

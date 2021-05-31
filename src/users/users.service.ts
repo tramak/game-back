@@ -1,4 +1,4 @@
-import { Injectable, NotAcceptableException } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, NotAcceptableException } from '@nestjs/common';
 import { UsersModel } from './users.model';
 import { CreateUserDto } from './dto/create-user.dto';
 import { InjectModel } from '@nestjs/sequelize';
@@ -9,6 +9,8 @@ import * as moment from 'moment';
 import { CompanyModel } from '../company/company.model';
 import { CreateCompanyDto } from '../company/dto/create-company.dto';
 import { MailService } from '../mail/mail.service';
+import { JwtService } from '@nestjs/jwt';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable()
 export class UsersService {
@@ -16,6 +18,8 @@ export class UsersService {
     @InjectModel(UsersModel)
     private usersRepository: typeof UsersModel,
     private roleService: RolesService,
+    @Inject(forwardRef(() => AuthService))
+    private authService: AuthService,
     private mailService: MailService,
   ) {}
 
@@ -24,10 +28,12 @@ export class UsersService {
     const user = await this.usersRepository.create({
       ...dto,
       invitationAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+      companyId: dto.companyId ? Number(dto.companyId) : undefined,
       password,
     });
 
-    // await this.mailService.sendUserConfirmation(user, password);
+    const token = await this.authService.generateTokenAccess(user);
+    await user.update({ token });
 
     const role = await this.roleService.getRoleByValue(dto.role || 'USER');
     await user.$set('roles', [role.id]);

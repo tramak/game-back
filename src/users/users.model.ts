@@ -19,6 +19,7 @@ interface UserCreationAttrs {
   group: string;
   password: string;
   invitationAt: string;
+  token?: string;
 }
 
 export interface IUser extends UserCreationAttrs {
@@ -75,6 +76,9 @@ export class UsersModel extends Model<UsersModel, UserCreationAttrs> {
 
   @Column({ type: DataType.DATE, allowNull: false })
   updatedAt: string;
+
+  @Column({ type: DataType.STRING })
+  token: string;
 
   @BelongsToMany(() => RolesModel, () => UsersRolesModel)
   roles: RolesModel[];

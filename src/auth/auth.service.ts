@@ -1,8 +1,9 @@
 import {
+  forwardRef,
   HttpException,
-  HttpStatus,
+  HttpStatus, Inject,
   Injectable,
-  UnauthorizedException,
+  UnauthorizedException
 } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
@@ -13,6 +14,7 @@ import { UsersModel } from '../users/users.model';
 @Injectable()
 export class AuthService {
   constructor(
+    @Inject(forwardRef(() => UsersService))
     private usersService: UsersService,
     private jwtService: JwtService,
   ) {}
@@ -46,6 +48,12 @@ export class AuthService {
     };
   }
 
+  async generateTokenAccess(user: UsersModel, options?) {
+    const payload = { userId: user.id };
+
+    return this.jwtService.sign(payload, options);
+  }
+
   async login(user: UsersModel) {
     return this.generateToken(user);
   }
@@ -55,7 +63,7 @@ export class AuthService {
     if (userExist) {
       throw new HttpException(
         'Пользователь с таким email существует',
-        HttpStatus.BAD_REQUEST,
+        HttpStatus.OK,
       );
     }
 

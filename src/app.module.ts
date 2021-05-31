@@ -12,12 +12,12 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { CompanyModule } from './company/company.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { AuthModule } from './auth/auth.module';
-import { JwtService } from '@nestjs/jwt';
 import { CompanyModel } from './company/company.model';
 import { FileModule } from './file/file.module';
 import { FileModel } from './file/file.model';
 import { MailModule } from './mail/mail.module';
 import { Dialect } from 'sequelize/types/lib/sequelize';
+import { GameModule } from './game/game.module';
 
 @Module({
   imports: [
@@ -50,6 +50,7 @@ import { Dialect } from 'sequelize/types/lib/sequelize';
     AuthModule,
     FileModule,
     MailModule,
+    GameModule,
   ],
   controllers: [AppController],
   providers: [AppService],
