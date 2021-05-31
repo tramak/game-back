@@ -6,11 +6,14 @@ import { InjectModel } from '@nestjs/sequelize';
 import { FileModel } from './file.model';
 import { CreateFileDto } from './dto/create-file';
 import { Express } from 'express';
+import { InjectQueue } from '@nestjs/bull';
+import { Queue } from 'bull';
 
 @Injectable()
 export class FileService {
   constructor(
     @InjectModel(FileModel) private fileRepository: typeof FileModel,
+    @InjectQueue('usersXslt') private usersXsltQueue: Queue,
   ) {}
 
   async createFile(file: Express.Multer.File): Promise<FileModel> {
@@ -29,6 +32,11 @@ export class FileService {
         userId: 1,
       };
       const fileModel = await this.fileRepository.create(dto);
+
+      await this.addUsersXsltQueue({
+        id: fileModel.id,
+      });
+
       return fileModel;
     } catch (e) {
       throw new HttpException(
@@ -36,5 +44,11 @@ export class FileService {
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
+  }
+
+  async addUsersXsltQueue(data: { id: number }) {
+    console.log('addUsersXsltQueue', { data });
+    const job = await this.usersXsltQueue.add(data);
+    console.log({ job });
   }
 }

@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import * as path from 'path';
+import { BullModule } from '@nestjs/bull';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
@@ -43,6 +44,12 @@ import { GameModule } from './game/game.module';
       ],
       synchronize: true,
       // autoLoadEntities: true,
+    }),
+    BullModule.forRoot({
+      redis: {
+        host: 'localhost',
+        port: 6379,
+      },
     }),
     UsersModule,
     RolesModule,
