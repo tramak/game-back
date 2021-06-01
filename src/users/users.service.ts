@@ -1,4 +1,4 @@
-import { forwardRef, Inject, Injectable, NotAcceptableException } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { UsersModel } from './users.model';
 import { CreateUserDto } from './dto/create-user.dto';
 import { InjectModel } from '@nestjs/sequelize';
@@ -7,9 +7,7 @@ import { RolesModel } from '../roles/roles.model';
 import * as bcrypt from 'bcrypt';
 import * as moment from 'moment';
 import { CompanyModel } from '../company/company.model';
-import { CreateCompanyDto } from '../company/dto/create-company.dto';
 import { MailService } from '../mail/mail.service';
-import { JwtService } from '@nestjs/jwt';
 import { AuthService } from '../auth/auth.service';
 
 @Injectable()

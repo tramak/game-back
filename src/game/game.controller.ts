@@ -16,12 +16,15 @@ export class GameController {
   @Get()
   async goToGame(@Query('token') token, @Res() response: Response) {
     try {
+      console.log({ token });
       const { userId } = jwt_decode<{ userId: string }>(token);
 
       const res = await this.gameService.getHseGames(userId);
 
-      const body = JSON.parse(res.body);
-      return response.redirect(body.Message);
+      return response.send(res).end();
+      // console.log({ userId, res });
+      // const body = JSON.parse(res.body);
+      // return response.redirect(body.Message);
     } catch (e) {
       throw new NotAcceptableException('Нет доступа');
     }

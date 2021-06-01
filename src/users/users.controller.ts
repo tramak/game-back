@@ -69,6 +69,7 @@ export class UsersController {
         ? moment(user.invitationAt).format('YYYY-MM-DD HH:mm:ss')
         : '',
       status: user.status,
+      token: user.token,
     }));
   }
 
