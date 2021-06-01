@@ -19,7 +19,7 @@ export class MailService {
       message: {
         recipients: [
           {
-            email: 'v.kalaev@tactise.com', //user.email,
+            email: user.email, // 'v.kalaev@tactise.com'
             substitutions: {
               CustomerId: user.id,
               to_name: user.fio,
