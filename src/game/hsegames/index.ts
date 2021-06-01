@@ -4,7 +4,7 @@ export const handler = async (userId, callback) => {
   const params = {
     FleetName: 'HSEGames_FleetReal' /* required */,
     StackName: 'HSEStack_Real' /* required */,
-    UserId: String(userId),
+    UserId: `id${userId}`,
     Validity: 300,
   };
 
@@ -21,10 +21,10 @@ function errorResponse(errorMessage, awsRequestId, callback) {
   //Function for handling error messaging back to client
   callback(null, {
     statusCode: 500,
-    body: JSON.stringify({
-      Error: errorMessage,
+    body: {
+      error: errorMessage,
       // Reference: awsRequestId,
-    }),
+    },
     headers: {
       'Access-Control-Allow-Origin': 'http://play.hsegames.com', //This should be the domain of the website that originated the request, example: amazonaws.com
     },
@@ -42,10 +42,10 @@ function createas2streamingurl(params, awsRequestId, callback) {
       const url = (response.data as AWSSuccess).StreamingURL;
       callback(null, {
         statusCode: 201,
-        body: JSON.stringify({
-          Message: url,
+        body: {
+          url,
           // Reference: awsRequestId,
-        }),
+        },
         headers: {
           'Access-Control-Allow-Origin': 'http://play.hsegames.com',
         },
@@ -53,7 +53,7 @@ function createas2streamingurl(params, awsRequestId, callback) {
     })
     .on('error', function (response) {
       errorResponse(
-        'Error creating AS2 streaming URL.',
+        'Error creating AS2 streaming URL.' + JSON.stringify(response),
         awsRequestId,
         callback,
       );

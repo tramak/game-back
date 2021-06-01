@@ -3,9 +3,10 @@ import {
   BelongsTo,
   BelongsToMany,
   Column,
-  DataType, ForeignKey,
+  DataType,
+  ForeignKey,
   Model,
-  Table
+  Table,
 } from 'sequelize-typescript';
 import { RolesModel } from '../roles/roles.model';
 import { UsersRolesModel } from '../roles/users-roles.model';
@@ -18,7 +19,7 @@ interface UserCreationAttrs {
   email: string;
   group: string;
   password: string;
-  invitationAt: string;
+  invitationAt?: string;
   token?: string;
 }
 
@@ -82,4 +83,9 @@ export class UsersModel extends Model<UsersModel, UserCreationAttrs> {
 
   @BelongsToMany(() => RolesModel, () => UsersRolesModel)
   roles: RolesModel[];
+
+  getInviteUrl() {
+    const baseUrl = 'http://games.tactise.com';
+    return `${baseUrl}/game/${this.token}`;
+  }
 }

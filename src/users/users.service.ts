@@ -25,7 +25,6 @@ export class UsersService {
     const password = await bcrypt.hash(dto.password, 5);
     const user = await this.usersRepository.create({
       ...dto,
-      invitationAt: moment().format('YYYY-MM-DD HH:mm:ss'),
       companyId: dto.companyId ? Number(dto.companyId) : undefined,
       password,
     });
@@ -36,7 +35,17 @@ export class UsersService {
     const role = await this.roleService.getRoleByValue(dto.role || 'USER');
     await user.$set('roles', [role.id]);
     user.roles = [role];
+
     return user;
+  }
+
+  async sendUserInvite(user: UsersModel) {
+    const result = await this.mailService.sendUserGame(user);
+    if (result.status === 200) {
+      await user.update({
+        invitationAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+      });
+    }
   }
 
   async editUser(id, dto: CreateUserDto): Promise<UsersModel> {

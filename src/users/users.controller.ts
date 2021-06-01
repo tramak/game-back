@@ -34,8 +34,10 @@ export class UsersController {
   @ApiOperation({ summary: 'Создание пользователя' })
   @ApiResponse({ status: 200, type: UsersModel })
   @Post()
-  create(@Body() userDto: CreateUserDto) {
-    return this.usersService.createUser(userDto);
+  async create(@Body() userDto: CreateUserDto) {
+    const user = await this.usersService.createUser(userDto);
+    await this.usersService.sendUserInvite(user);
+    return user;
   }
 
   @ApiOperation({ summary: 'Получение пользователей' })

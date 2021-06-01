@@ -1,35 +1,69 @@
-import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
-import { UsersModel } from '../users/users.model';
 import { join } from 'path';
+import axios from 'axios';
+import { UsersModel } from '../users/users.model';
+import fetch from 'node-fetch';
 
 @Injectable()
 export class MailService {
-  constructor(private mailerService: MailerService) {}
+  constructor() {}
 
-  async sendUserConfirmation(user: UsersModel, token: string) {
-    const url = `example.com/auth/confirm?token=${token}`;
+  async sendUserGame(user: UsersModel) {
+    const headers = {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      'X-API-KEY': '65tm6ip7eeztbqskom7fnbq5efhex1i34xpe8miy',
+    };
 
-    console.log(
-      join(__dirname, '..', '..', 'mail', 'templates', 'confirmation'),
-    );
-    await this.mailerService.sendMail({
-      to: 'kalaev-viktor@mail.ru', // user.email,
-      // from: '"Support Team" <support@example.com>', // override default from
-      subject: 'Tactise игра',
-      // template: join('confirmation'), // `.hbs` extension is appended automatically
-      template: join(
-        __dirname,
-        '..',
-        '..',
-        'mail',
-        'templates',
-        'confirmation',
-      ), // `.hbs` extension is appended automatically
-      context: {
-        name: user.fio,
-        url,
+    const inputBody = {
+      message: {
+        recipients: [
+          {
+            email: 'v.kalaev@tactise.com', //user.email,
+            substitutions: {
+              CustomerId: user.id,
+              to_name: user.fio,
+              url: user.getInviteUrl(),
+            },
+          },
+        ],
+        subject: 'Начни играть',
+        from_email: 'support@tactise.com',
+        from_name: 'tactise.com',
+        reply_to: 'support@tactise.com',
+        body: {
+          html: `
+              <b>Привет, {{to_name}}</b>
+              <br />
+              <a href="{{url}}">В бой</a>
+          `,
+          plaintext: 'Привет, {{to_name}}, В бой: {{url}}',
+        },
       },
-    });
+    };
+
+    try {
+      // const result = await axios.post(
+      //   'https://eu1.unione.io/ru/transactional/api/v1/email/send.json',
+      //   inputBody,
+      //   {
+      //     headers,
+      //   },
+      // );
+
+      const result = await fetch(
+        'https://eu1.unione.io/ru/transactional/api/v1/email/send.json',
+        {
+          method: 'POST',
+          body: JSON.stringify(inputBody),
+          headers: headers,
+        },
+      );
+
+      return result;
+    } catch (e) {
+      console.log({ e });
+      return e;
+    }
   }
 }
