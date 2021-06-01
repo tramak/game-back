@@ -49,6 +49,14 @@ export class FileService {
   async addUsersXsltQueue(data: { id: number }) {
     console.log('addUsersXsltQueue', { data });
     const job = await this.usersXsltQueue.add(data);
-    console.log({ job });
+    // console.log({ job });
+  }
+
+  async findById(id: number): Promise<FileModel> {
+    const file = await this.fileRepository.findOne({
+      where: { id },
+    });
+
+    return file;
   }
 }
