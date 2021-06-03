@@ -35,6 +35,7 @@ import { GameModule } from './game/game.module';
       username: process.env.DATABASE_USER || 'postgres',
       password: process.env.DATABASE_PASSWORD || '1111',
       database: process.env.DATABASE_DB || 'postgres',
+      logging: false,
       models: [
         UsersModel,
         RolesModel,

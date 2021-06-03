@@ -3,10 +3,16 @@ import { Job } from 'bull';
 import * as path from 'path';
 import * as xlsx from 'xlsx';
 import { FileService } from './file.service';
+import { UsersService } from '../users/users.service';
+import { CreateUserDto } from '../users/dto/create-user.dto';
+import { validate } from 'class-validator';
 
 @Processor('usersXslt')
 export class FileConsumer {
-  constructor(private fileService: FileService) {}
+  constructor(
+    private fileService: FileService,
+    private usersService: UsersService,
+  ) {}
 
   @Process()
   async transcode(job: Job<unknown>) {
@@ -31,7 +37,7 @@ export class FileConsumer {
           if (!result[number]) result[number] = {};
           switch (key[0]) {
             case 'A':
-              result[number]['name'] = value.v;
+              result[number]['fio'] = value.v;
               return;
             case 'B':
               result[number]['email'] = value.v;
@@ -43,7 +49,22 @@ export class FileConsumer {
         });
       });
 
-      console.log({ result });
+      for (const item of result) {
+        try {
+          const userDto = new CreateUserDto();
+          userDto.fio = item.fio;
+          userDto.email = item.email;
+          userDto.group = item.group;
+
+          const errors = await validate(userDto);
+          if (!errors.length) {
+            const user = await this.usersService.createUser(userDto);
+            await this.usersService.sendUserInvite(user);
+          }
+        } catch (e) {
+          console.log({ e });
+        }
+      }
     } catch (e) {
       console.log({ e });
     }

@@ -1,9 +1,10 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { FileService } from './file.service';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { FileModel } from './file.model';
 import { BullModule } from '@nestjs/bull';
 import { FileConsumer } from './file.consumer';
+import { UsersModule } from '../users/users.module';
 
 @Module({
   providers: [FileService, FileConsumer],
@@ -12,6 +13,7 @@ import { FileConsumer } from './file.consumer';
     BullModule.registerQueue({
       name: 'usersXslt',
     }),
+    forwardRef(() => UsersModule),
   ],
   exports: [FileService],
 })

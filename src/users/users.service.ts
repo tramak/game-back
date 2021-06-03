@@ -22,7 +22,7 @@ export class UsersService {
   ) {}
 
   async createUser(dto: CreateUserDto): Promise<UsersModel> {
-    const password = await bcrypt.hash(dto.password, 5);
+    const password = dto.password ? await bcrypt.hash(dto.password, 5) : '';
     const user = await this.usersRepository.create({
       ...dto,
       companyId: dto.companyId ? Number(dto.companyId) : undefined,

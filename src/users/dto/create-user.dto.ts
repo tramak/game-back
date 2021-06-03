@@ -1,8 +1,10 @@
 import { ApiOperation, ApiProperty } from '@nestjs/swagger';
+import { IsEmail, IsNotEmpty } from 'class-validator';
 
 export class CreateUserDto {
+  @IsNotEmpty()
   @ApiProperty({ example: 'Калаев Виктор Владимирович', description: 'ФИО' })
-  readonly fio: string;
+  fio: string;
 
   @ApiProperty({ example: 2, description: 'Id компании' })
   readonly companyId?: number;
@@ -13,18 +15,24 @@ export class CreateUserDto {
   })
   readonly role: string;
 
+  @IsEmail(undefined, {
+    message: 'email не верен',
+  })
   @ApiProperty({
     example: 'kalaev-viktor@mail.ru',
     description: 'Электронная почта',
   })
-  readonly email: string;
+  email: string;
 
   @ApiProperty({ example: 'Офисе', description: 'Группа' })
-  readonly group: string;
+  group: string;
 
   @ApiProperty({ example: '1234', description: 'Пароль' })
-  readonly password: string;
+  readonly password?: string;
 
-  @ApiProperty({ example: '1234', description: 'Токен пользователя для доступа в игру' })
+  @ApiProperty({
+    example: '1234',
+    description: 'Токен пользователя для доступа в игру',
+  })
   readonly token?: string;
 }

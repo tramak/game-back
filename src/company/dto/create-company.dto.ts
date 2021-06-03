@@ -1,6 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsEmail, IsNotEmpty, IsUrl } from 'class-validator';
 
 export class CreateCompanyDto {
+  @IsNotEmpty()
   @ApiProperty({ example: 'Моя компания', description: 'Название компании' })
   readonly name: string;
 
@@ -10,12 +12,15 @@ export class CreateCompanyDto {
   })
   readonly description?: string;
 
+  @IsEmail()
   @ApiProperty({
     example: 'kalaev-viktor@mail.ru',
     description: 'Электронная почта',
   })
   readonly email: string;
 
+  @IsNotEmpty()
+  @IsUrl()
   @ApiProperty({
     example: 'https://tactise.com',
     description: 'url для компании',
