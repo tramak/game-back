@@ -9,14 +9,22 @@ import { RolesModule } from '../roles/roles.module';
 import { FileModule } from '../file/file.module';
 import { MailModule } from '../mail/mail.module';
 import { AuthModule } from '../auth/auth.module';
+import { CompanyModel } from '../company/company.model';
+import { CompanyModule } from '../company/company.module';
 
 @Module({
   controllers: [UsersController],
   providers: [UsersService],
   imports: [
-    SequelizeModule.forFeature([UsersModel, RolesModel, UsersRolesModel]),
+    SequelizeModule.forFeature([
+      UsersModel,
+      RolesModel,
+      UsersRolesModel,
+      CompanyModel,
+    ]),
     RolesModule,
     MailModule,
+    CompanyModule,
     forwardRef(() => FileModule),
     forwardRef(() => AuthModule),
   ],

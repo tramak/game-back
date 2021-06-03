@@ -9,6 +9,7 @@ import * as moment from 'moment';
 import { CompanyModel } from '../company/company.model';
 import { MailService } from '../mail/mail.service';
 import { AuthService } from '../auth/auth.service';
+import { CompanyService } from '../company/company.service';
 
 @Injectable()
 export class UsersService {
@@ -19,6 +20,7 @@ export class UsersService {
     @Inject(forwardRef(() => AuthService))
     private authService: AuthService,
     private mailService: MailService,
+    private companyService: CompanyService,
   ) {}
 
   async createUser(dto: CreateUserDto): Promise<UsersModel> {
@@ -35,6 +37,11 @@ export class UsersService {
     const role = await this.roleService.getRoleByValue(dto.role || 'USER');
     await user.$set('roles', [role.id]);
     user.roles = [role];
+
+    if (user.companyId) {
+      const company = await this.companyService.findById(user.companyId);
+      user.company = company;
+    }
 
     return user;
   }
@@ -98,6 +105,7 @@ export class UsersService {
   async findById(id: number): Promise<UsersModel> {
     const user = await this.usersRepository.findOne({
       where: { id },
+      include: { all: true },
     });
 
     return user;

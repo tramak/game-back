@@ -37,7 +37,7 @@ export class UsersController {
   async create(@Body() userDto: CreateUserDto) {
     const user = await this.usersService.createUser(userDto);
 
-    if (user.roles.find((role) => role.value === 'USER')) {
+    if ((user?.roles || []).find((role) => role.value === 'USER')) {
       await this.usersService.sendUserInvite(user);
     }
     return user;
