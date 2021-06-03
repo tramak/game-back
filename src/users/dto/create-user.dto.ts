@@ -7,7 +7,7 @@ export class CreateUserDto {
   fio: string;
 
   @ApiProperty({ example: 2, description: 'Id компании' })
-  readonly companyId?: number;
+  companyId?: number;
 
   @ApiProperty({
     example: 'USER',

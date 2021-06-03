@@ -8,6 +8,7 @@ import { CreateFileDto } from './dto/create-file';
 import { Express } from 'express';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
+import { UsersModel } from '../users/users.model';
 
 @Injectable()
 export class FileService {
@@ -16,7 +17,10 @@ export class FileService {
     @InjectQueue('usersXslt') private usersXsltQueue: Queue,
   ) {}
 
-  async createFile(file: Express.Multer.File): Promise<FileModel> {
+  async createFile(
+    file: Express.Multer.File,
+    user: UsersModel,
+  ): Promise<FileModel> {
     try {
       const filePath = path.resolve(__dirname, '..', '..', 'xsl');
       if (!fs.existsSync(filePath)) {
@@ -29,7 +33,7 @@ export class FileService {
         file: fileName,
         name: file.originalname,
         type: 1, // 'XSLT' доработаем позже
-        userId: 1,
+        userId: user.id,
       };
       const fileModel = await this.fileRepository.create(dto);
 

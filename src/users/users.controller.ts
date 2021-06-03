@@ -36,7 +36,10 @@ export class UsersController {
   @Post()
   async create(@Body() userDto: CreateUserDto) {
     const user = await this.usersService.createUser(userDto);
-    await this.usersService.sendUserInvite(user);
+
+    if (user.roles.find((role) => role.value === 'USER')) {
+      await this.usersService.sendUserInvite(user);
+    }
     return user;
   }
 
@@ -103,8 +106,9 @@ export class UsersController {
   @ApiResponse({ status: 200 })
   @Post('import/xsl')
   @UseInterceptors(FileInterceptor('file'))
-  async importXsl(@UploadedFile() file) {
-    const fileModel = await this.fileService.createFile(file);
+  async importXsl(@UploadedFile() file, @Request() req) {
+    const userAuth = await this.usersService.findByEmail(req.user.email);
+    const fileModel = await this.fileService.createFile(file, userAuth);
     return {
       id: fileModel,
     };

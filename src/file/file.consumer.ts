@@ -28,6 +28,7 @@ export class FileConsumer {
     try {
       const filePath = path.resolve(__dirname, '..', '..', 'xsl');
       const file = await this.fileService.findById(Number(job.id));
+      const user = await this.usersService.findById(file.userId);
 
       const result = [];
       const xlsxData = await xlsx.readFile(path.join(filePath, file.file));
@@ -55,6 +56,7 @@ export class FileConsumer {
           userDto.fio = item.fio;
           userDto.email = item.email;
           userDto.group = item.group;
+          userDto.companyId = user.companyId;
 
           const errors = await validate(userDto);
           if (!errors.length) {
