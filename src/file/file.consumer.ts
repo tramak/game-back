@@ -29,7 +29,6 @@ export class FileConsumer {
       const filePath = path.resolve(__dirname, '..', '..', 'xsl');
       const file = await this.fileService.findById(Number(job.id));
       const userOwner = await this.usersService.findById(file.userId);
-      console.log({ userId: file.userId });
 
       const result = [];
       const xlsxData = await xlsx.readFile(path.join(filePath, file.file));

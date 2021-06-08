@@ -1,5 +1,6 @@
 import { ApiOperation, ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty } from 'class-validator';
+import { IsEmail, IsNotEmpty, Validate } from 'class-validator';
+import { EmailUnique } from '../validators/EmailUnique';
 
 export class CreateUserDto {
   @IsNotEmpty()
@@ -15,6 +16,7 @@ export class CreateUserDto {
   })
   readonly role: string;
 
+  @Validate(EmailUnique)
   @IsEmail(undefined, {
     message: 'email не верен',
   })

@@ -1,9 +1,10 @@
 import {
+  Body,
   Controller,
   Get,
-  NotAcceptableException,
+  NotAcceptableException, Post,
   Query,
-  Res,
+  Res
 } from '@nestjs/common';
 import { Response } from 'express';
 import jwt_decode from 'jwt-decode';
@@ -28,5 +29,13 @@ export class GameController {
     } catch (e) {
       throw new NotAcceptableException('Нет доступа');
     }
+  }
+
+  @Post('result')
+  async setResult(@Body() params) {
+    return {
+      test: 'Все норм',
+      ...params,
+    };
   }
 }

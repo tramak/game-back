@@ -11,10 +11,11 @@ import { MailModule } from '../mail/mail.module';
 import { AuthModule } from '../auth/auth.module';
 import { CompanyModel } from '../company/company.model';
 import { CompanyModule } from '../company/company.module';
+import { EmailUnique } from './validators/EmailUnique';
 
 @Module({
   controllers: [UsersController],
-  providers: [UsersService],
+  providers: [UsersService, EmailUnique],
   imports: [
     SequelizeModule.forFeature([
       UsersModel,

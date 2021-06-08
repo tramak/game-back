@@ -114,4 +114,10 @@ export class UsersService {
   async deleteById(id: number) {
     await this.usersRepository.destroy({ where: { id } });
   }
+
+  async isUniqueEmail(email: string) {
+    const user = await this.usersRepository.findOne({ where: { email } });
+
+    return !user;
+  }
 }
