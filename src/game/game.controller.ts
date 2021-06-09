@@ -17,7 +17,6 @@ export class GameController {
   @Get()
   async goToGame(@Query('token') token, @Res() response: Response) {
     try {
-      console.log({ token });
       const { userId } = jwt_decode<{ userId: string }>(token);
 
       const res = await this.gameService.getHseGames(userId);

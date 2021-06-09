@@ -58,6 +58,7 @@ export class UsersService {
   async editUser(id, dto: CreateUserDto): Promise<UsersModel> {
     const user = await this.findById(id);
 
+    console.log(user.id);
     let password;
     if (dto.password) {
       password = await bcrypt.hash(dto.password, 5);
@@ -70,6 +71,7 @@ export class UsersService {
       password,
     });
 
+    console.log({ role: dto.role });
     if (dto.role) {
       const role = await this.roleService.getRoleByValue(dto.role);
       await user.$set('roles', [role.id]);
@@ -115,9 +117,31 @@ export class UsersService {
     await this.usersRepository.destroy({ where: { id } });
   }
 
-  async isUniqueEmail(email: string) {
+  async isUniqueEmail(email: string, id?: number) {
     const user = await this.usersRepository.findOne({ where: { email } });
 
-    return !user;
+    return !user || user.id === id;
+  }
+
+  normalizeUser(user: UsersModel) {
+    const roles = user.roles.map((role) => role.value);
+
+    return {
+      id: user.id,
+      fio: user.fio,
+      company: user.company?.name,
+      email: user.email,
+      group: user.group,
+      roles,
+      invitationAt: user.invitationAt
+        ? moment(user.invitationAt).format('YYYY-MM-DD HH:mm:ss')
+        : '',
+      status: user.status,
+      token: user.token,
+    };
+  }
+
+  getAllUsersInCompany(companyId) {
+    const count = this.usersRepository.count({ where: { companyId } });
   }
 }

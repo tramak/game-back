@@ -1,9 +1,12 @@
 import { ApiOperation, ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, Validate } from 'class-validator';
+import { IsEmail, IsNotEmpty, Validate, MinLength } from 'class-validator';
 import { EmailUnique } from '../validators/EmailUnique';
 
 export class CreateUserDto {
+  id: number;
+
   @IsNotEmpty()
+  @MinLength(2)
   @ApiProperty({ example: 'Калаев Виктор Владимирович', description: 'ФИО' })
   fio: string;
 

@@ -2,12 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { CompanyModel } from './company.model';
 import { InjectModel } from '@nestjs/sequelize';
+import { UsersModel } from '../users/users.model';
 
 @Injectable()
 export class CompanyService {
   constructor(
     @InjectModel(CompanyModel)
     private companyRepository: typeof CompanyModel,
+    private usersRepository: typeof UsersModel,
   ) {}
 
   async createCompany(dto: CreateCompanyDto): Promise<CompanyModel> {

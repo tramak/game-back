@@ -19,7 +19,6 @@ import { UsersModel } from './users.model';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { FileService } from '../file/file.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-import * as moment from 'moment';
 import { Roles } from '../roles/interfaces';
 
 @ApiTags('Пользователи')
@@ -40,11 +39,12 @@ export class UsersController {
     if ((user?.roles || []).find((role) => role.value === 'USER')) {
       await this.usersService.sendUserInvite(user);
     }
-    return user;
+
+    return this.usersService.normalizeUser(user);
   }
 
   @ApiOperation({ summary: 'Получение пользователей' })
-  @ApiResponse({ status: 200, type: [UsersModel] })
+  @ApiResponse({ status: 200 })
   @Get('all')
   async getAll(
     @Query('count') count = 50,
@@ -63,40 +63,32 @@ export class UsersController {
       where,
     );
 
-    return users.map((user) => ({
-      id: user.id,
-      fio: user.fio,
-      company: user.company?.name,
-      email: user.email,
-      group: user.group,
-      roles: user.roles.map((role) => role.value),
-      invitationAt: user.invitationAt
-        ? moment(user.invitationAt).format('YYYY-MM-DD HH:mm:ss')
-        : '',
-      status: user.status,
-      token: user.token,
-    }));
+    return users.map((user) => this.usersService.normalizeUser(user));
   }
 
   @ApiOperation({ summary: 'Возвращаем пользователя по id' })
-  @ApiResponse({ status: 200, type: [UsersModel] })
+  @ApiResponse({ status: 200 })
   @Get(':id')
   async findOne(@Param() params) {
     const user = await this.usersService.findById(Number(params.id));
     user.password = undefined;
-    return user;
+
+    return this.usersService.normalizeUser(user);
   }
 
   @ApiOperation({ summary: 'Редактирование пользователя' })
   @ApiResponse({ status: 200, type: UsersModel })
+  // @UsePipes(new ValidationPipe({ skip }))
   @Put(':id')
-  edit(@Param() params, @Body() userDto: CreateUserDto) {
+  async edit(@Param() params, @Body() userDto: CreateUserDto) {
     const id = Number(params.id);
-    return this.usersService.editUser(id, userDto);
+    const user = await this.usersService.editUser(id, userDto);
+
+    return this.usersService.normalizeUser(user);
   }
 
   @ApiOperation({ summary: 'Удаляем пользователя по id' })
-  @ApiResponse({ status: 200, type: UsersModel })
+  @ApiResponse({ status: 200 })
   @Delete(':id')
   remove(@Param() params) {
     return this.usersService.deleteById(Number(params.id));
