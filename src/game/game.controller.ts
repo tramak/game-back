@@ -9,10 +9,14 @@ import {
 import { Response } from 'express';
 import jwt_decode from 'jwt-decode';
 import { GameService } from './game.service';
+import { UsersService } from '../users/users.service';
 
 @Controller('api/game')
 export class GameController {
-  constructor(private readonly gameService: GameService) {}
+  constructor(
+    private readonly gameService: GameService,
+    private readonly usersService: UsersService,
+  ) {}
 
   @Get()
   async goToGame(@Query('token') token, @Res() response: Response) {
@@ -32,9 +36,13 @@ export class GameController {
 
   @Post('result')
   async setResult(@Body() params) {
+    const res = await this.usersService.setResult(
+      Number(params.id),
+      Number(params.result),
+    );
+
     return {
-      test: 'Все норм',
-      ...params,
+      status: 'ok',
     };
   }
 }

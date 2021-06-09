@@ -123,6 +123,20 @@ export class UsersService {
     return !user || user.id === id;
   }
 
+  async setResult(id: number, result: number) {
+    const res = await this.usersRepository.update(
+      {
+        status: result,
+      },
+      {
+        where: { id },
+      },
+    );
+
+    console.log({ res });
+    return res;
+  }
+
   normalizeUser(user: UsersModel) {
     const roles = user.roles.map((role) => role.value);
 

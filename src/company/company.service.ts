@@ -9,7 +9,7 @@ export class CompanyService {
   constructor(
     @InjectModel(CompanyModel)
     private companyRepository: typeof CompanyModel,
-    private usersRepository: typeof UsersModel,
+    // private usersRepository: typeof UsersModel,
   ) {}
 
   async createCompany(dto: CreateCompanyDto): Promise<CompanyModel> {
