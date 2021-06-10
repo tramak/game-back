@@ -2,9 +2,10 @@ import {
   Body,
   Controller,
   Get,
-  NotAcceptableException, Post,
+  NotAcceptableException,
+  Post,
   Query,
-  Res
+  Res,
 } from '@nestjs/common';
 import { Response } from 'express';
 import jwt_decode from 'jwt-decode';
@@ -23,7 +24,7 @@ export class GameController {
     try {
       const { userId } = jwt_decode<{ userId: string }>(token);
 
-      const res = await this.gameService.getHseGames(userId);
+      const res = await this.gameService.getHseGames(userId, token);
 
       return response.send(res).end();
       // console.log({ userId, res });
@@ -36,9 +37,11 @@ export class GameController {
 
   @Post('result')
   async setResult(@Body() params) {
+    const { token, id, result } = params;
+    const userId = token ? jwt_decode<{ userId: string }>(token).userId : id;
     const res = await this.usersService.setResult(
-      Number(params.id),
-      Number(params.result),
+      Number(userId),
+      Number(result),
     );
 
     return {

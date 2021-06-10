@@ -1,11 +1,12 @@
 import { AppStream, AWSError, Response, config } from 'aws-sdk';
 
-export const handler = async (userId, callback) => {
+export const handler = async (userId, token, callback) => {
   const params = {
     FleetName: 'hsegamesinternetfleet' /* required */,
     StackName: 'HSEGamesStack2' /* required */,
     UserId: `id${userId}`,
     Validity: 300,
+    SessionContext: token,
   };
 
   config.update({ region: 'eu-central-1' });

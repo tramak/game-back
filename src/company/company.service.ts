@@ -1,15 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { CompanyModel } from './company.model';
 import { InjectModel } from '@nestjs/sequelize';
 import { UsersModel } from '../users/users.model';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class CompanyService {
   constructor(
     @InjectModel(CompanyModel)
     private companyRepository: typeof CompanyModel,
-    // private usersRepository: typeof UsersModel,
+    @Inject(forwardRef(() => UsersService))
+    private usersService: UsersService,
   ) {}
 
   async createCompany(dto: CreateCompanyDto): Promise<CompanyModel> {
@@ -32,6 +34,26 @@ export class CompanyService {
     });
 
     return companies;
+  }
+
+  async getAddCountUsers(companies: Array<CompanyModel>) {
+    const res = [];
+    for (const company of companies) {
+      const countUsers = await this.usersService.getCountUsersInCompany(
+        company.id,
+      );
+
+      res.push({
+        id: company.id,
+        name: company.name,
+        email: company.email,
+        url: company.url,
+        description: company.description,
+        countUsers
+      });
+    }
+
+    return res;
   }
 
   async findById(id: number): Promise<CompanyModel> {

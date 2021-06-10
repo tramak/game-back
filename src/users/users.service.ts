@@ -20,6 +20,7 @@ export class UsersService {
     @Inject(forwardRef(() => AuthService))
     private authService: AuthService,
     private mailService: MailService,
+    @Inject(forwardRef(() => CompanyService))
     private companyService: CompanyService,
   ) {}
 
@@ -55,10 +56,18 @@ export class UsersService {
     }
   }
 
+  async sendAdminRegistration(user: UsersModel, password: string) {
+    const result = await this.mailService.sendAdminRegistration(user, password);
+    if (result.status === 200) {
+      await user.update({
+        invitationAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+      });
+    }
+  }
+
   async editUser(id, dto: CreateUserDto): Promise<UsersModel> {
     const user = await this.findById(id);
 
-    console.log(user.id);
     let password;
     if (dto.password) {
       password = await bcrypt.hash(dto.password, 5);
@@ -71,7 +80,6 @@ export class UsersService {
       password,
     });
 
-    console.log({ role: dto.role });
     if (dto.role) {
       const role = await this.roleService.getRoleByValue(dto.role);
       await user.$set('roles', [role.id]);
@@ -90,6 +98,7 @@ export class UsersService {
       offset,
       include: [RolesModel, CompanyModel],
       where,
+      order: [['id', 'DESC']],
     });
 
     return users;
@@ -155,7 +164,7 @@ export class UsersService {
     };
   }
 
-  getAllUsersInCompany(companyId) {
-    const count = this.usersRepository.count({ where: { companyId } });
+  async getCountUsersInCompany(companyId: number) {
+    return await this.usersRepository.count({ where: { companyId } });
   }
 }

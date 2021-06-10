@@ -25,7 +25,7 @@ import { EmailUnique } from './validators/EmailUnique';
     ]),
     RolesModule,
     MailModule,
-    CompanyModule,
+    forwardRef(() => CompanyModule),
     forwardRef(() => FileModule),
     forwardRef(() => AuthModule),
   ],

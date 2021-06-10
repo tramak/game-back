@@ -20,6 +20,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { FileService } from '../file/file.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Roles } from '../roles/interfaces';
+import { ROLES } from '../roles/consts';
 
 @ApiTags('Пользователи')
 @UseGuards(JwtAuthGuard)
@@ -35,9 +36,14 @@ export class UsersController {
   @Post()
   async create(@Body() userDto: CreateUserDto) {
     const user = await this.usersService.createUser(userDto);
+    const roles = user?.roles || [];
 
-    if ((user?.roles || []).find((role) => role.value === 'USER')) {
+    if (roles.find((role) => role.value === ROLES.USER)) {
       await this.usersService.sendUserInvite(user);
+    }
+
+    if (roles.find((role) => role.value === ROLES.ADMIN_COMPANY)) {
+      await this.usersService.sendAdminRegistration(user, userDto.password);
     }
 
     return this.usersService.normalizeUser(user);

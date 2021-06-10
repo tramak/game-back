@@ -38,8 +38,13 @@ export class CompanyController {
   @ApiOperation({ summary: 'Получение компаний' })
   @ApiResponse({ status: 200, type: [CompanyModel] })
   @Get('all')
-  getAll(@Query('count') count = 50, @Query('offset') offset = 0) {
-    return this.companyService.getAll(Number(count), Number(offset));
+  async getAll(@Query('count') count = 50, @Query('offset') offset = 0) {
+    const users = await this.companyService.getAll(
+      Number(count),
+      Number(offset),
+    );
+
+    return await this.companyService.getAddCountUsers(users);
   }
 
   @ApiOperation({ summary: 'Возвращаем компанию по id' })
