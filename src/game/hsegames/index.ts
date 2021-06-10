@@ -2,8 +2,8 @@ import { AppStream, AWSError, Response, config } from 'aws-sdk';
 
 export const handler = async (userId, token, callback) => {
   const params = {
-    FleetName: 'hsegamesinternetfleet' /* required */,
-    StackName: 'HSEGamesStack2' /* required */,
+    FleetName: 'JsonTestFleet' /* required */,
+    StackName: 'InternetTestStack' /* required */,
     UserId: `id${userId}`,
     Validity: 300,
     SessionContext: token,
