@@ -6,7 +6,7 @@ export const handler = async (user: UsersModel, token: string, callback) => {
   const stack = user.company.stack;
 
   const params = {
-    ApplicationId: 'firefox',
+    ApplicationId: 'TestJson',
     FleetName: fleet,
     StackName: stack,
     UserId: `id${user.id}`,
