@@ -22,14 +22,16 @@ export class GameController {
   @Get()
   async goToGame(@Query('token') token, @Res() response: Response) {
     try {
-      const { userId } = jwt_decode<{ userId: string }>(token);
+      const { userId } = jwt_decode<{ userId: string | number }>(token);
+      const user = await this.usersService.findById(Number(userId));
 
-      const res = await this.gameService.getHseGames(userId, token);
+      if (!user) {
+        throw new Error();
+      }
+
+      const res = await this.gameService.getHseGames(user, token);
 
       return response.send(res).end();
-      // console.log({ userId, res });
-      // const body = JSON.parse(res.body);
-      // return response.redirect(body.Message);
     } catch (e) {
       throw new NotAcceptableException('Нет доступа');
     }

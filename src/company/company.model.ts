@@ -6,6 +6,8 @@ interface CompanyCreationAttrs {
   description?: string;
   email?: string;
   url?: string;
+  fleet: string;
+  stack: string;
 }
 
 @Table({ tableName: 'company' })
@@ -44,4 +46,18 @@ export class CompanyModel extends Model<CompanyModel, CompanyCreationAttrs> {
   })
   @Column({ type: DataType.STRING })
   url: string;
+
+  @ApiProperty({
+    example: 'Fleettedfvf456df',
+    description: 'fleet для aws',
+  })
+  @Column({ type: DataType.STRING })
+  fleet: string;
+
+  @ApiProperty({
+    example: 'Stack345dsf',
+    description: 'stack для aws',
+  })
+  @Column({ type: DataType.STRING })
+  stack: string;
 }

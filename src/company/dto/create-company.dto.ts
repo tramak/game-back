@@ -26,4 +26,16 @@ export class CreateCompanyDto {
     description: 'url для компании',
   })
   readonly url: string;
+
+  @ApiProperty({
+    example: 'Fleettedfvf456df',
+    description: 'fleet для aws',
+  })
+  readonly fleet: string;
+
+  @ApiProperty({
+    example: 'Stack345dsf',
+    description: 'stack для aws',
+  })
+  readonly stack: string;
 }

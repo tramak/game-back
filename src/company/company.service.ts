@@ -49,7 +49,7 @@ export class CompanyService {
         email: company.email,
         url: company.url,
         description: company.description,
-        countUsers
+        countUsers,
       });
     }
 

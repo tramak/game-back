@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { handler } from './hsegames';
+import { UsersModel } from '../users/users.model';
 
 @Injectable()
 export class GameService {
-  getHseGames(userId: number | string, token: string): Promise<any> {
+  getHseGames(user: UsersModel, token: string): Promise<any> {
     return new Promise((resolve, reject) => {
-      handler(userId, token, (p, data) => {
+      return handler(user, token, (p, data) => {
         resolve(data);
       });
     });

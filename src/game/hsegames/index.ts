@@ -1,10 +1,15 @@
 import { AppStream, AWSError, Response, config } from 'aws-sdk';
+import { UsersModel } from '../../users/users.model';
 
-export const handler = async (userId, token, callback) => {
+export const handler = async (user: UsersModel, token: string, callback) => {
+  const fleet = user.company.fleet;
+  const stack = user.company.stack;
+
   const params = {
-    FleetName: 'JsonTestFleet' /* required */,
-    StackName: 'InternetTestStack' /* required */,
-    UserId: `id${userId}`,
+    ApplicationId: 'firefox',
+    FleetName: fleet,
+    StackName: stack,
+    UserId: `id${user.id}`,
     Validity: 300,
     SessionContext: token,
   };
