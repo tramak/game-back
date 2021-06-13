@@ -11,7 +11,7 @@ export const handler = async (user: UsersModel, token: string, callback) => {
     StackName: stack,
     UserId: `id${user.id}`,
     Validity: 300,
-    SessionContext: `-${token}`
+    SessionContext: `-token ${token}`,
   };
 
   config.update({ region: 'eu-central-1' });
